@@ -259,9 +259,9 @@ namespace aocd4
 
             /* -------------------SETUP --------------------------  */
 
-            string matrixstring = File.ReadAllText(@"c:\input.txt"); 
+            string matrixstring = File.ReadAllText(@"input.txt"); 
                 //read all the file and convert in string
-            string numbersextracted = File.ReadAllText(@"c:\input-numbers.txt"); 
+            string numbersextracted = File.ReadAllText(@"input-numbers.txt"); 
                 //read all the numbers extracted
             int[,] res = AocD4.AcquireMatrix(matrixstring, 5);
                 //convert string in one maxi matrix 
@@ -275,32 +275,49 @@ namespace aocd4
             //adding -1 to all matrix splitted
             for (int i = 0; i < listOfMatrix.Count; i++)
             {
-                listOfMatrix[i] = AocD4.AddRowToMatrix(listOfMatrix[i], 1, -1);
-                listOfMatrix[i] = AocD4.AddColToMatrix(listOfMatrix[i], 1, -1);
+                listOfMatrix[i] = AocD4.AddRowToMatrix(listOfMatrix[i], 1, 0);
+                listOfMatrix[i] = AocD4.AddColToMatrix(listOfMatrix[i], 1, 0);
             }
             /* -----------------------------------------------------  */
 
             /* -------------------END SETUP ------------------------  */
 
 
-                var winner = new int[6,6];
-            for (int i = 0; i < listOfMatrix.Count; i++)
+            int[,] winnerMatrix = null;
+
+            //inizializzo il numero minimo di estrazioni a maxValue
+            int minExtractionNumber = Int32.MaxValue;
+
+            //ciclo su ogni matrice
+            foreach (var currentMatrix in listOfMatrix)
             {
-            while (!AocD4.MatrixIsWinner(listOfMatrix[i]))
+                int currentExtractionNumber = 0;
+                //Effettuo l'estrazione numero per numero
+                foreach (var extractedNumber in listOfNumbers)
                 {
-                    foreach (var item in listOfNumbers)
+                    currentExtractionNumber++;
+                    if (AocD4.MatrixContainsNumber(currentMatrix, extractedNumber))
                     {
-                        if (AocD4.MatrixContainsNumber(listOfMatrix[i], item))
+                        AocD4.CountItemFoundInMatrix(currentMatrix,
+                            AocD4.GetColOfItem(currentMatrix, extractedNumber),
+                            AocD4.GetRowOfItem(currentMatrix, extractedNumber));
+                    }
+
+                    //dopo ogni estrazione verifico se la matrice è vincente
+                    if(AocD4.MatrixIsWinner(currentMatrix))
+                    {
+                        //Se la vittoria di questa matrice è avvenuta prima di un'altra matrice allora aggiorno la winnerMatrix
+                        if (currentExtractionNumber < minExtractionNumber)
                         {
-                            AocD4.CountItemFoundInMatrix(listOfMatrix[i],
-                                AocD4.GetColOfItem(listOfMatrix[i], item),
-                                AocD4.GetRowOfItem(listOfMatrix[i], item));
+                            winnerMatrix = currentMatrix;
+                            minExtractionNumber = currentExtractionNumber;
                         }
+                        break;
                     }
                 }
-                winner = listOfMatrix[i];
             }
-            Console.Write($"Winner matrix is: {AocD4.MatrixIsWinner(winner)}");
+            
+            Console.Write($"Winner matrix is: {AocD4.MatrixIsWinner(winnerMatrix)}");
 
 
             //stampa di tutte le matrici per verificare le liste di matrici
