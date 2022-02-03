@@ -13,11 +13,11 @@ namespace aocd4
         {
             /* ------------------------------------------------------------- */
             //Get matrix from text file and convert it in 2D Array
-            public static int[,] AcquireMatrix(string s, int lenght) 
+            public static int[,] AcquireMatrix(string s, int lenght)
             {
                 string[] arrayStrings = s.Split('\n');
-                for (int a = 0; a < arrayStrings.Length; a++) 
-                    //riduce spazi duplici in singoli spazi
+                for (int a = 0; a < arrayStrings.Length; a++)
+                //riduce spazi duplici in singoli spazi
                 {
                     arrayStrings[a] = arrayStrings[a].Replace("  ", " ");
                 }
@@ -41,7 +41,7 @@ namespace aocd4
 
             /* ------------------------------------------------------------- */
 
-            //Print a matrix 
+            //Print a matrix
             public static void PrintMatrix(int[,] mat)
             {
                 Console.WriteLine("\n");
@@ -57,22 +57,22 @@ namespace aocd4
             /* ------------------------------------------------------------- */
 
             //Sum digits of a matrix
-            public static int SumMatrixDigits (int [,] mat)
+            public static int SumMatrixDigits(int[,] mat, int row, int col)
             {
                 int sum = 0;
-                for (int i = 0; i < mat.GetLength(0); i++)
-                    for (int j = 0; j < mat.GetLength(1); j++)
+                for (int i = 0; i < row; i++)
+                    for (int j = 0; j < col; j++)
                         sum += mat[i, j];
-                    return sum;
+                return sum;
             }
             /* ------------------------------------------------------------- */
 
-            //split great matrix to square matrix of row 
-            public static List<int[,]> SplitSquareMatrix (int [,] mat, int row) 
+            //split great matrix to square matrix of row
+            public static List<int[,]> SplitSquareMatrix(int[,] mat, int row)
 
 
             {
-                
+
                 List<int[,]> result = new List<int[,]>();
                 int tempcont = 5;
                 int a = 0;
@@ -82,25 +82,25 @@ namespace aocd4
                     if (i == tempcont)
                     {
                         result.Add((int[,])tempmatrix.Clone()); //per evitare il reference problem, è necessario copiare la matrice
-                        a = 0; 
+                        a = 0;
                         continue;
                     }
                     for (int j = 0; j < mat.GetLength(1); j++)
                     {
-                        tempmatrix[a, j] = mat[i,j];
-                    } 
+                        tempmatrix[a, j] = mat[i, j];
+                    }
                     a++;
-                    if (i > tempcont) tempcont += 6; 
+                    if (i > tempcont) tempcont += 6;
 
                 }
                 return result;
             }
-            
+
             /* ------------------------------------------------------------- */
             //add number of row to matrix (last row) with value to fill
-            public static int[,] AddRowToMatrix (int[,] matrix, int rowToAdd, int valueToFill) 
+            public static int[,] AddRowToMatrix(int[,] matrix, int rowToAdd, int valueToFill)
             {
-                int row = matrix.GetLength(0)+rowToAdd;
+                int row = matrix.GetLength(0) + rowToAdd;
                 int[,] result = new int[row, matrix.GetLength(1)];
                 /* First copy the original matrix to preserve it */
                 for (int r = 0; r < matrix.GetLength(0); r++)
@@ -113,13 +113,13 @@ namespace aocd4
 
                 /*Insert Values into Main Matrix
                 --------------------------------------------------------------------------------*/
-                    for (int c = 0; c < matrix.GetLength(1); c++)
-                    {
-                        result[row-1, c] = valueToFill;
-                    }
+                for (int c = 0; c < matrix.GetLength(1); c++)
+                {
+                    result[row - 1, c] = valueToFill;
+                }
                 return result;
             }
-           
+
             /* ------------------------------------------------------------- */
             //add number of col to matrix (last col) with value to fill
             public static int[,] AddColToMatrix(int[,] matrix, int colToAdd, int valueToFill)
@@ -139,7 +139,7 @@ namespace aocd4
                 --------------------------------------------------------------------------------*/
                 for (int r = 0; r < matrix.GetLength(0); r++)
                 {
-                    result[r, col-1] = valueToFill;
+                    result[r, col - 1] = valueToFill;
                 }
                 return result;
             }
@@ -148,7 +148,7 @@ namespace aocd4
 
             /* ------------------------------------------------------------- */
             //convert string of numbers with comma -> in list
-            public static List<int> GetNumbersInList (string s)
+            public static List<int> GetNumbersInList(string s)
             {
                 List<int> list = new List<int>();
                 var a = s.Split(',').ToList();
@@ -162,7 +162,7 @@ namespace aocd4
 
             /* ------------------------------------------------------------- */
             //print a list
-            public static void PrintList (List<int> list)
+            public static void PrintList(List<int> list)
             {
                 foreach (var item in list)
                 {
@@ -172,38 +172,38 @@ namespace aocd4
             /* ------------------------------------------------------------- */
 
             // search number (by list of numbers) in matrix and return true/false
-            public static bool MatrixContainsNumber (int[,] matrix, int number)
+            public static bool MatrixContainsNumber(int[,] matrix, int number)
             {
                 bool res = false;
-                for (int r = 0; r < matrix.GetLength(0); r++) 
+                for (int r = 0; r < matrix.GetLength(0); r++)
                 {
                     for (int c = 0; c < matrix.GetLength(1); c++)
                     {
                         if (matrix[r, c] == number)
                         {
-                            res = true; 
+                            res = true;
                             break;
                         }
                     }
                     if (res == true) break;
-                } 
+                }
                 return res;
-            } 
+            }
             /* ------------------------------------------------------------- */
 
-            public static int GetRowOfItem (int[,] matrix, int item)
+            public static int GetRowOfItem(int[,] matrix, int item)
             {
-                int row=0;
+                int row = 0;
                 for (int r = 0; r < matrix.GetLength(0); r++)
                 {
                     for (int c = 0; c < matrix.GetLength(1); c++)
                     {
                         if (matrix[r, c] == item)
                         {
-                            row = r;break;
+                            row = r; break;
                         }
                     }
-                } 
+                }
                 return row;
             }
 
@@ -223,25 +223,25 @@ namespace aocd4
                 return col;
             }
 
-            public static void CountItemFoundInMatrix (int[,] matrix, int row, int col)
-                //for item found decrement the last row/col
+            public static void CountItemFoundInMatrix(int[,] matrix, int row, int col)
+            //for item found decrement the last row/col
             {
                 matrix[row, 5]--;
                 matrix[5, col]--;
             }
 
-            public static bool MatrixIsWinner (int[,] matrix)
+            public static bool MatrixIsWinner(int[,] matrix)
             {
                 bool winner = false;
                 for (int r = 0; r < matrix.GetLength(0); r++)
                 {
-                    if (matrix[r, 5] == -5)
+                    if (matrix[r, 5] == -6)
                     {
                         winner = true; break;
                     }
                     for (int c = 0; c < matrix.GetLength(1); c++)
                     {
-                        if (matrix[5, c] == -5)
+                        if (matrix[5, c] == -6)
                         {
                             winner = true; break;
                         }
@@ -249,7 +249,7 @@ namespace aocd4
                 }
                 return winner;
             }
-                //Verify if last row or col is -5 for declaring winner matrix
+            //Verify if last row or col is -5 for declaring winner matrix
 
         }
 
@@ -264,9 +264,9 @@ namespace aocd4
             string numbersextracted = File.ReadAllText(@"input-numbers.txt"); 
                 //read all the numbers extracted
             int[,] res = AocD4.AcquireMatrix(matrixstring, 5);
-                //convert string in one maxi matrix 
+            //convert string in one maxi matrix
             List<int[,]> listOfMatrix = AocD4.SplitSquareMatrix(res, 5);
-                //split maxi matrix in list of matrices by 5 row and col
+            //split maxi matrix in list of matrices by 5 row and col
             List<int> listOfNumbers = AocD4.GetNumbersInList(numbersextracted);
             //convert string of extracted numbers in list
 
@@ -314,10 +314,14 @@ namespace aocd4
                         }
                         break;
                     }
+                    Console.WriteLine($"Somma numeri estratti = {extractedInWinnerMatrix.Sum()}");
+                    Console.WriteLine($"Somma totale matrice vincente = {AocD4.SumMatrixDigits(listOfMatrix[j - 1], 5, 5)}");
+                    unmarkedNum = AocD4.SumMatrixDigits(listOfMatrix[j - 1], 5, 5) - extractedInWinnerMatrix.Sum();
+                    Console.WriteLine($"Sum of all unmarked nums is: {unmarkedNum}");
+                    Console.WriteLine($"Final score is: {item*unmarkedNum}");
+                    break;
                 }
             }
-            
-            Console.Write($"Winner matrix is: {AocD4.MatrixIsWinner(winnerMatrix)}");
 
 
             //stampa di tutte le matrici per verificare le liste di matrici
@@ -325,7 +329,7 @@ namespace aocd4
             //{
             //    AocD4.PrintMatrix(item);
             //}
-            /*     -------------------     START TEST AREA -------------------------   
+            /*     -------------------     START TEST AREA -------------------------  
             //    AocD4.GetRowOfItem(lista[0], listOfNumbers[0]),
             //    AocD4.GetColOfItem(lista[0], listOfNumbers[0]));
             //AocD4.MatrixIsWinner(lista[0]);
@@ -337,7 +341,7 @@ namespace aocd4
             //var List = new List<int[,]>(); //si possono creare liste di matrici
             //AocD4.SumMatrixDigits(res);
             //Console.WriteLine(matrixstring);
-            
+           
             AocD4.PrintMatrix(res);
             Console.WriteLine("\n\n");
             int[,] res2 = AocD4.AddRowToMatrix(res, 1, -1);
@@ -358,8 +362,6 @@ namespace aocd4
         }
 
     }
-    
+
 }
-
-
 
