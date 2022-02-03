@@ -270,91 +270,46 @@ namespace aocd4
             List<int> listOfNumbers = AocD4.GetNumbersInList(numbersextracted);
             //convert string of extracted numbers in list
 
-
-            /* -----------------------------------------------------  */
-            //adding -1 to all matrix splitted
-            for (int i = 0; i < listOfMatrix.Count; i++)
-            {
-                listOfMatrix[i] = AocD4.AddRowToMatrix(listOfMatrix[i], 1, 0);
-                listOfMatrix[i] = AocD4.AddColToMatrix(listOfMatrix[i], 1, 0);
-            }
-            /* -----------------------------------------------------  */
-
-            /* -------------------END SETUP ------------------------  */
-
-
-            int[,] winnerMatrix = null;
+            BingoCard winnerCard = null;
 
             //inizializzo il numero minimo di estrazioni a maxValue
             int minExtractionNumber = Int32.MaxValue;
 
+            int lastExtractedNumberForWinnewCard = 0;
+
             //ciclo su ogni matrice
             foreach (var currentMatrix in listOfMatrix)
             {
+                BingoCard currentCard = new BingoCard(currentMatrix);
+
                 int currentExtractionNumber = 0;
                 //Effettuo l'estrazione numero per numero
                 foreach (var extractedNumber in listOfNumbers)
                 {
                     currentExtractionNumber++;
-                    if (AocD4.MatrixContainsNumber(currentMatrix, extractedNumber))
-                    {
-                        AocD4.CountItemFoundInMatrix(currentMatrix,
-                            AocD4.GetColOfItem(currentMatrix, extractedNumber),
-                            AocD4.GetRowOfItem(currentMatrix, extractedNumber));
-                    }
 
-                    //dopo ogni estrazione verifico se la matrice è vincente
-                    if(AocD4.MatrixIsWinner(currentMatrix))
+                    if(currentCard.ContainsNumber(extractedNumber))
                     {
-                        //Se la vittoria di questa matrice è avvenuta prima di un'altra matrice allora aggiorno la winnerMatrix
+                        currentCard.SetNumberExtracted(extractedNumber);
+                    }
+                    if(currentCard.VerifyIsWinnerCard())
+                    {
                         if (currentExtractionNumber < minExtractionNumber)
                         {
-                            winnerMatrix = currentMatrix;
+                            winnerCard = currentCard;
                             minExtractionNumber = currentExtractionNumber;
+                            lastExtractedNumberForWinnewCard = extractedNumber;
                         }
                         break;
-                    }
-                    Console.WriteLine($"Somma numeri estratti = {extractedInWinnerMatrix.Sum()}");
-                    Console.WriteLine($"Somma totale matrice vincente = {AocD4.SumMatrixDigits(listOfMatrix[j - 1], 5, 5)}");
-                    unmarkedNum = AocD4.SumMatrixDigits(listOfMatrix[j - 1], 5, 5) - extractedInWinnerMatrix.Sum();
-                    Console.WriteLine($"Sum of all unmarked nums is: {unmarkedNum}");
-                    Console.WriteLine($"Final score is: {item*unmarkedNum}");
-                    break;
+                    }  
                 }
             }
 
+            var sumNotExtractedNumbers = winnerCard.GetAllNotExtractedNumbers().Sum();
 
-            //stampa di tutte le matrici per verificare le liste di matrici
-            //foreach (var item in lista)
-            //{
-            //    AocD4.PrintMatrix(item);
-            //}
-            /*     -------------------     START TEST AREA -------------------------  
-            //    AocD4.GetRowOfItem(lista[0], listOfNumbers[0]),
-            //    AocD4.GetColOfItem(lista[0], listOfNumbers[0]));
-            //AocD4.MatrixIsWinner(lista[0]);
-            //AocD4.PrintMatrix(lista[0]);
-            //bool contain = AocD4.MatrixContainsNumber(lista[0], 22);
-            //Console.WriteLine(contain);
-            //Console.WriteLine(numbersextracted);
-            AocD4.PrintList(listOfNumbers);
-            //var List = new List<int[,]>(); //si possono creare liste di matrici
-            //AocD4.SumMatrixDigits(res);
-            //Console.WriteLine(matrixstring);
-           
-            AocD4.PrintMatrix(res);
-            Console.WriteLine("\n\n");
-            int[,] res2 = AocD4.AddRowToMatrix(res, 1, -1);
-            AocD4.PrintMatrix(res2);
-            Console.WriteLine("\n\n");
-            int[,] res3 = AocD4.AddColToMatrix(res2, 1, -1);
-            AocD4.PrintMatrix(res3);
-            List<int[,]> lista = AocD4.SplitSquareMatrix(res, 5);
-            AocD4.PrintMatrix(lista[0]);
-
-            /*     -------------------     END TEST AREA -------------------------   */
-
-
+            Console.WriteLine($"Somma numeri non estratti = {sumNotExtractedNumbers}");
+            Console.WriteLine($"Final score is: {lastExtractedNumberForWinnewCard * sumNotExtractedNumbers}");
+            
 
 
             Console.ReadKey();
