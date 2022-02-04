@@ -251,7 +251,6 @@ namespace aocd4
             }
             /* ------------------------------------------------------------- */
 
-
         }
 
 
@@ -291,15 +290,18 @@ namespace aocd4
             Console.WriteLine("Press a key when ready to process input data");
             Console.ReadKey();
             int j;
+            int countExtracted = 0;
             foreach (var item in listOfNumbers) //loop over all numbers extracted
             {
-            Console.WriteLine($"Checking number... {item}");
+                countExtracted++;
                 for (j = 0; j < listOfMatrix.Count; j++) //loop over all matrix
                 {
-                Console.WriteLine($"Checking matrix nr. {j}");
+                    Console.WriteLine($"\nChecking number... {item} in matrix nr. {j} \n");
                     if (AocD4.MatrixContainsNumber(listOfMatrix[j], item)) //check matrix for item
                     {
-                    Console.WriteLine($"Found number {item} in matrix number {j} !");
+                    Console.WriteLine($"\n------------------------------------------\n" +
+                        $"Found number {item} in matrix number {j} !" +
+                        $"\n------------------------------------------\n");
                     AocD4.CountItemFoundInMatrix(listOfMatrix[j],
                         AocD4.GetRowOfItem(listOfMatrix[j], item),
                             AocD4.GetColOfItem(listOfMatrix[j], item));
@@ -316,9 +318,9 @@ namespace aocd4
                                     extractedInWinnerMatrix.Add(num);
                                 }
                             }
-                            Console.WriteLine($"\n---------------------------\nWe have a winner matrix!");
+                            Console.WriteLine($"\n---------------------------\nWe have a winner matrix!\n---------------------------\n");
                             AocD4.PrintMatrix(listOfMatrix[j]);
-                            Console.WriteLine($"\nLast number extracted: {item}");
+                            Console.WriteLine($"\nWinner number: {item}, extracted after {countExtracted} times");
                             Console.WriteLine($"Sum of extracted numbers: {extractedNums.Sum()}");
                             Console.WriteLine($"Sum of extracted numbers in winner matrix: {extractedInWinnerMatrix.Sum()}");
                             Console.WriteLine($"Sum of all numbers in winner matrix: {AocD4.SumMatrixDigits(listOfMatrix[j],5,5)}");
